@@ -14,10 +14,16 @@ class StringCalculator {
       delimiter = customDelimiter;
     }
 
-    return numbersToProcess
+    const parsedNumbers = numbersToProcess
       .split(delimiter)
-      .map(num => parseInt(num))
-      .reduce((sum, num) => sum + num, 0);
+      .map(num => parseInt(num));
+
+    const negativeNumbers = parsedNumbers.filter(num => num < 0);
+    if (negativeNumbers.length > 0) {
+      throw new Error(`negative numbers not allowed ${negativeNumbers.join(',')}`);
+    }
+
+    return parsedNumbers.reduce((sum, num) => sum + num, 0);
   }
 }
 
