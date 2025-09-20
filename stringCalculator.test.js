@@ -32,4 +32,26 @@ describe('StringCalculator', () => {
     expect(calculator.add('1\n2\n3')).toBe(6);
     expect(calculator.add('4\n5,6\n7')).toBe(22);
   });
+
+  test('should support custom delimiters', () => {
+    expect(calculator.add('//;\n1;2')).toBe(3);
+    expect(calculator.add('//|\n1|2|3')).toBe(6);
+    expect(calculator.add('//*\n1*2*3*4')).toBe(10);
+  });
+
+  test('should handle edge cases with custom delimiters', () => {
+    expect(calculator.add('//;\n1')).toBe(1); 
+    expect(calculator.add('//,\n2,3,4')).toBe(9);
+  });
+
+  test('should throw exception for negative numbers', () => {
+    expect(() => calculator.add('-1,2')).toThrow('negative numbers not allowed -1');
+    expect(() => calculator.add('2,-4,3,-5')).toThrow('negative numbers not allowed -4,-5');
+    expect(() => calculator.add('//;\n1;-2;3')).toThrow('negative numbers not allowed -2');
+  });
+
+  test('should handle multiple negative numbers in exception message', () => {
+    expect(() => calculator.add('-1,-2,-3')).toThrow('negative numbers not allowed -1,-2,-3');
+    expect(() => calculator.add('1,-2,3,-4,5,-6')).toThrow('negative numbers not allowed -2,-4,-6');
+  });
 });
